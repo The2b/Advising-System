@@ -11,11 +11,12 @@ import javax.ws.rs.core.Response;
 import javax.servlet.http.HttpServletResponse;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonArrayBuilder;;
 
 import edu.lewisu.cs.api.course.CourseFormConstants;
 
 /**
- * Servlet implementation class CourseManagement
+ * Servlet implementation class CourseCreateService
  * 
  * Used to expose API functions for creating courses in the database
  *
@@ -41,25 +42,54 @@ public class CourseCreateService {
                                  @QueryParam(CourseFormConstants.COURSE_DESC) @DefaultValue("") String desc,
                                  @QueryParam(CourseFormConstants.COURSE_CREDITS) @DefaultValue("0") Integer credits,
                                  @QueryParam(CourseFormConstants.COURSE_PRE_REQS) @DefaultValue("") String preReqs)  {
+
         // Break the pre-reqs into an array of course prefix's and numbers
         // To do this, split it on strings by optional white space, a comma, and then optional white space
         String preReqRegex = "\\s*,\\s*";
-        if(preReqs != null) {
-            String[] preReqsArr = preReqs.split(preReqRegex);
-        }
+        String[] preReqsArr = splitStringIfNotEmpty(preReqs, preReqRegex);
 
         // Set our status based on the validity above
         int errorCode = (validateCourseInfo(courseId, title, desc, credits, preReqs) ? HttpServletResponse.SC_OK : HttpServletResponse.SC_BAD_REQUEST);
+        
+        // @TODO Create a query to add data to the DB
 
-        JsonObject obj = Json.createObjectBuilder()
+        // Create a response based on the data we recieved
+        // First, we need a dedicated object for our preReqsArray
+        JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+        for(String preReq : preReqsArr) {
+            arrBuilder.add(preReq);
+        }
+
+        // Then create the JSON object
+        JsonObject jsonObj = Json.createObjectBuilder()
                             .add(CourseFormConstants.COURSE_ID, courseId)
                             .add(CourseFormConstants.COURSE_TITLE, title)
                             .add(CourseFormConstants.COURSE_DESC, desc)
                             .add(CourseFormConstants.COURSE_CREDITS, credits)
                             .add(CourseFormConstants.COURSE_PRE_REQS, preReqs)
+                            .add("coursePreReqsArr", arrBuilder.build())
                             .build();
 
-        return Response.status(errorCode).entity(obj).build();
+
+        // And send a response with our error code (200 for success, 400 for an invalid POST doc) and our JSON object
+        return Response.status(errorCode).entity(jsonObj).build();
+    }
+
+    /**
+     * @author Thomas Lenz <thomas.lenz96@gmail.com>
+     * 
+     * Safely split a string based on a regex
+     * 
+     * @TODO Make sure my assumptions are correct here
+     */
+    private String[] splitStringIfNotEmpty(String stringToSplit, String regex) {
+        String[] splitArr = {};
+
+        if(stringToSplit != null) {
+            splitArr = stringToSplit.split(regex);
+        }
+
+        return splitArr;
     }
 
     /**
