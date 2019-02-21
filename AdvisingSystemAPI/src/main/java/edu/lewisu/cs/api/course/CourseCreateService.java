@@ -17,13 +17,13 @@ import edu.lewisu.cs.api.course.CourseFormConstants;
 /**
  * Servlet implementation class CourseManagement
  * 
- * Used to expose API functions for editing, creating, and removing various properties of courses in the database
- * In particular, it can act as a decision maker for which of these operations to pass the action onto
+ * Used to expose API functions for creating courses in the database
  *
  * @TODO Separate whatever needs to be separated between this and the worker class
  */
 @Path("/createCourse")
 public class CourseCreateService {
+
     /**
      * @author Thomas Lenz <thomas.lenz96@gmail.com>
      * Creates a course with the given properties, taken from an XML document given to us via POST
@@ -36,7 +36,11 @@ public class CourseCreateService {
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createCourse(@QueryParam(CourseFormConstants.COURSE_ID) @DefaultValue("\"\"") String courseId, @QueryParam(CourseFormConstants.COURSE_TITLE) @DefaultValue("\"\"") String title, @QueryParam(CourseFormConstants.COURSE_DESC) @DefaultValue("\"\"") String desc, @QueryParam(CourseFormConstants.COURSE_CREDITS) @DefaultValue("0") Integer credits, @QueryParam(CourseFormConstants.COURSE_PRE_REQS) @DefaultValue("\"\"") String preReqs)  {
+    public Response createCourse(@QueryParam(CourseFormConstants.COURSE_ID) @DefaultValue("\"\"") String courseId,
+                                 @QueryParam(CourseFormConstants.COURSE_TITLE) @DefaultValue("\"\"") String title,
+                                 @QueryParam(CourseFormConstants.COURSE_DESC) @DefaultValue("\"\"") String desc,
+                                 @QueryParam(CourseFormConstants.COURSE_CREDITS) @DefaultValue("0") Integer credits,
+                                 @QueryParam(CourseFormConstants.COURSE_PRE_REQS) @DefaultValue("\"\"") String preReqs)  {
         // Break the pre-reqs into an array of course prefix's and numbers
         // To do this, split it on strings by optional white space, a comma, and then optional white space
         String preReqRegex = "\\s*,\\s*";
@@ -69,7 +73,6 @@ public class CourseCreateService {
      *  title is not NULL or an empty string
      *  desc is not NULL or an empty string
      *  credits is > 0
-     *      Mostly because I cannot remember how boolean operators handle null and Integers in Java
      *
      * preReqsArr is just there for completion
      *
