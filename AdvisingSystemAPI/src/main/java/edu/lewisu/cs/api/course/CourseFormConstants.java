@@ -3,6 +3,7 @@ package edu.lewisu.cs.api.course;
 
 public class CourseFormConstants {
     public static final String COURSE_ID = "courseId";
+    public static final String OLD_COURSE_ID = "oldCourseId";
     public static final String COURSE_TITLE = "courseTitle";
     public static final String COURSE_DESC = "courseDesc";
     public static final String COURSE_CREDITS = "courseCredits";
