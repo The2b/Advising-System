@@ -5,6 +5,6 @@ public class CourseFormConstants {
     public static final String COURSE_ID = "courseId";
     public static final String COURSE_TITLE = "courseTitle";
     public static final String COURSE_DESC = "courseDesc";
-    public static final String COURSE_CREDITS = "credits";
-    public static final String COURSE_PRE_REQS = "preReqs";
+    public static final String COURSE_CREDITS = "courseCredits";
+    public static final String COURSE_PRE_REQS = "coursePreReqs";
 }

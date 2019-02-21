@@ -31,16 +31,16 @@ public class CourseCreateService {
      * @TODO Get the user properties from the DB guys and plug them in here
      * @TODO Make this use CourseFormConstants for QueryParam, if possible
      * 
-     * @return status: Returns an integer exit code based on the error it runs into, or lack there-of
+     * @return response: Returns a JSON object with the information used to create the course, along with a status code to identify success or failure
      */
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createCourse(@QueryParam(CourseFormConstants.COURSE_ID) @DefaultValue("\"\"") String courseId,
-                                 @QueryParam(CourseFormConstants.COURSE_TITLE) @DefaultValue("\"\"") String title,
-                                 @QueryParam(CourseFormConstants.COURSE_DESC) @DefaultValue("\"\"") String desc,
+    public Response createCourse(@QueryParam(CourseFormConstants.COURSE_ID) @DefaultValue("") String courseId,
+                                 @QueryParam(CourseFormConstants.COURSE_TITLE) @DefaultValue("") String title,
+                                 @QueryParam(CourseFormConstants.COURSE_DESC) @DefaultValue("") String desc,
                                  @QueryParam(CourseFormConstants.COURSE_CREDITS) @DefaultValue("0") Integer credits,
-                                 @QueryParam(CourseFormConstants.COURSE_PRE_REQS) @DefaultValue("\"\"") String preReqs)  {
+                                 @QueryParam(CourseFormConstants.COURSE_PRE_REQS) @DefaultValue("") String preReqs)  {
         // Break the pre-reqs into an array of course prefix's and numbers
         // To do this, split it on strings by optional white space, a comma, and then optional white space
         String preReqRegex = "\\s*,\\s*";
@@ -59,7 +59,7 @@ public class CourseCreateService {
                             .add(CourseFormConstants.COURSE_PRE_REQS, preReqs)
                             .build();
 
-        return Response.ok(obj).build();
+        return Response.status(errorCode).entity(obj).build();
     }
 
     /**
