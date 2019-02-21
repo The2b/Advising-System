@@ -27,10 +27,8 @@ public class CourseCreateService {
 
     /**
      * @author Thomas Lenz <thomas.lenz96@gmail.com>
+     
      * Creates a course with the given properties, taken from an XML document given to us via POST
-     * 
-     * @TODO Get the user properties from the DB guys and plug them in here
-     * @TODO Make this use CourseFormConstants for QueryParam, if possible
      * 
      * @return response: Returns a JSON object with the information used to create the course, along with a status code to identify success or failure
      */
